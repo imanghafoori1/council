@@ -38,8 +38,8 @@ Route::delete('replies/{reply}', 'RepliesController@destroy')->name('replies.des
 
 Route::post('replies/{reply}/best', 'BestRepliesController@store')->name('best-replies.store');
 
-Route::post('threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->name('threads.store');
-Route::delete('threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->name('threads.destroy');
+Route::post('threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->name('threads.store.subscriptions');
+Route::delete('threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->name('threads.destroy.subscriptions');
 
 Route::post('replies/{reply}/favorites', 'FavoritesController@store')->name('replies.favorite');
 Route::delete('replies/{reply}/favorites', 'FavoritesController@destroy')->name('replies.unfavorite');

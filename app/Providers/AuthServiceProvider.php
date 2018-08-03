@@ -41,18 +41,22 @@ class AuthServiceProvider extends ServiceProvider
 //        });
     }
 
-    private function authenticateRoutes(): void
+    private function authenticateRoutes()
     {
         HeyMan::whenYouReachRoute([
             'avatar',
-            'threads.store',
+            'replies.favorite',
+            'user-notifications',
+            'user-notifications.destroy',
+            'replies.unfavorite',
+            'threads.update',
             'threads.destroy',
         ])->youShouldBeLoggedIn()->otherwise()->weThrowNew(AuthenticationException::class);
 
-        HeyMan::whenYouReachRoute(['replies.store'])->youShouldBeLoggedIn()->otherwise()->redirect()->to('/login');
+        HeyMan::whenYouReachRoute(['threads.store', 'replies.store'])->youShouldBeLoggedIn()->otherwise()->redirect()->route('login');
     }
 
-    private function validateRequests(): void
+    private function validateRequests()
     {
         HeyMan::whenYouReachRoute('replies.store')->yourRequestShouldBeValid(['body' => 'required|spamfree']);
         HeyMan::whenYouReachRoute('threads.update')->yourRequestShouldBeValid([
@@ -77,9 +81,23 @@ class AuthServiceProvider extends ServiceProvider
 
         HeyMan::whenYouCallAction('RepliesController@update')->yourRequestShouldBeValid(['name' => 'required|spamfree',]);
         HeyMan::whenYouReachRoute('avatar')->yourRequestShouldBeValid(['avatar' => ['required', 'image']]);
+
+        HeyMan::whenYouSendPost('threads')->yourRequestShouldBeValid(function () {
+            return [
+                'title' => 'required|spamfree',
+                'body' => 'required|spamfree',
+                'channel_id' => [
+                    'required',
+                    Rule::exists('channels', 'id')->where(function ($query) {
+                        $query->where('archived', false);
+                    }),
+                ],
+                //'g-recaptcha-response' => ['required', $recaptcha]
+            ];
+        });
     }
 
-    private function authorizeAdminRoutes(): void
+    private function authorizeAdminRoutes()
     {
         Gate::define('isAdmin', function ($user) {
             return $user->isAdmin();
@@ -95,16 +113,14 @@ class AuthServiceProvider extends ServiceProvider
         HeyMan::whenYouReachRoute('admin.*')->thisGateShouldAllow('isAdmin')->otherwise()->weDenyAccess();
     }
 
-    private function authorizeEloquentModels(): void
+    private function authorizeEloquentModels()
     {
-        $createReply = function ($user) {
+        Gate::define('createReply', function ($user) {
             if (! $lastReply = $user->fresh()->lastReply) {
                 return true;
             }
             return ! $lastReply->wasJustPublished();
-        };
-
-        Gate::define('createReply', $createReply);
+        });
 
         $hasConfirmedEmail = function () {
             return auth()->user()->confirmed or auth()->user()->isAdmin();
@@ -114,13 +130,10 @@ class AuthServiceProvider extends ServiceProvider
 
         HeyMan::whenYouReachRoute('replies.store')->thisGateShouldAllow('createReply')->otherwise()->weThrowNew(ThrottleException::class, 'You are replying too frequently. Please take a break.');
 
-        $shouldOwnModel = function ($model) {
-            return auth()->id() == $model->user_id or auth()->user()->isAdmin();
-        };
         Gate::define('ownModel', function ($user, $model) {
             return $user->id == $model->user_id or $user->isAdmin();
         });
         HeyMan::whenYouUpdate([Thread::class, Reply::class])->thisGateShouldAllow('ownModel')->otherwise()->weDenyAccess();
-        HeyMan::whenYouDelete([Thread::class, Reply::class,])->thisClosureShouldAllow($shouldOwnModel)->otherwise()->weDenyAccess();
+        HeyMan::whenYouDelete([Thread::class, Reply::class])->thisGateShouldAllow('ownModel')->otherwise()->weDenyAccess();
     }
 }

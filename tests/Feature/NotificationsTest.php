@@ -43,11 +43,8 @@ class NotificationsTest extends TestCase
     function a_user_can_fetch_their_unread_notifications()
     {
         create(DatabaseNotification::class);
-
-        $this->assertCount(
-            1,
-            $this->getJson(route('user-notifications', auth()->user()->name))->json()
-        );
+        $data = $this->getJson(route('user-notifications', auth()->user()->name))->json();
+        $this->assertCount(1, $data);
     }
 
     /** @test */

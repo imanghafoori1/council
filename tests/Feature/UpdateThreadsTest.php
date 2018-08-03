@@ -24,7 +24,6 @@ class UpdateThreadsTest extends TestCase
     {
         $thread = create(\App\Thread::class, ['user_id' => create(\App\User::class)->id]);
 
-        HeyMan::turnOn()->eloquentChecks();
         $this->patch($thread->path(), [
             'title' => 'required',
             'body' => 'required'

@@ -16,7 +16,7 @@ class ThreadsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'show']);
+        //$this->middleware('auth')->except(['index', 'show']);
     }
 
     /**
@@ -61,18 +61,6 @@ class ThreadsController extends Controller
      */
     public function store(Recaptcha $recaptcha)
     {
-        request()->validate([
-            'title' => 'required|spamfree',
-            'body' => 'required|spamfree',
-            'channel_id' => [
-                'required',
-                Rule::exists('channels', 'id')->where(function ($query) {
-                    $query->where('archived', false);
-                })
-            ],
-            //'g-recaptcha-response' => ['required', $recaptcha]
-        ]);
-
         $thread = Thread::create([
             'user_id' => auth()->id(),
             'channel_id' => request('channel_id'),
