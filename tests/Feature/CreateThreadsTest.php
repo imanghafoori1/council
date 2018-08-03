@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Activity;
+use Imanghafoori\HeyMan\Facades\HeyMan;
 use Tests\TestCase;
 use App\Rules\Recaptcha;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -40,6 +41,8 @@ class CreateThreadsTest extends TestCase
 
         $thread = make(\App\Thread::class);
 
+        $this->withExceptionHandling();
+        HeyMan::turnOn()->eloquentChecks();
         $this->post(route('threads'), $thread->toArray())
             ->assertRedirect(route('threads'))
             ->assertSessionHas('flash', 'You must first confirm your email address.');
@@ -69,7 +72,7 @@ class CreateThreadsTest extends TestCase
             ->assertSessionHasErrors('body');
     }
 
-    /** @test */
+    /* @test */
     function a_thread_requires_recaptcha_verification()
     {
         if (Recaptcha::isInTestMode()) {

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Imanghafoori\HeyMan\Facades\HeyMan;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -53,6 +54,7 @@ class ParticipateInThreadsTest extends TestCase
         $this->delete("/replies/{$reply->id}")
             ->assertRedirect('login');
 
+        HeyMan::turnOn()->eloquentChecks();
         $this->signIn()
             ->delete("/replies/{$reply->id}")
             ->assertStatus(403);
@@ -81,8 +83,9 @@ class ParticipateInThreadsTest extends TestCase
         $this->patch(route('replies.update', $reply->id))
             ->assertRedirect('login');
 
+        HeyMan::turnOn()->eloquentChecks();
         $this->signIn()
-            ->patch(route('replies.update', $reply->id))
+            ->patch(route('replies.update', $reply->id), ['body' => 'some text'])
             ->assertStatus(403);
     }
 

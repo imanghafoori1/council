@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Imanghafoori\HeyMan\Facades\HeyMan;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -23,7 +24,11 @@ class UpdateThreadsTest extends TestCase
     {
         $thread = create(\App\Thread::class, ['user_id' => create(\App\User::class)->id]);
 
-        $this->patch($thread->path(), [])->assertStatus(403);
+        HeyMan::turnOn()->eloquentChecks();
+        $this->patch($thread->path(), [
+            'title' => 'required',
+            'body' => 'required'
+        ])->assertStatus(403);
     }
 
     /** @test */

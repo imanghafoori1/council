@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Reply;
 use Carbon\Carbon;
+use Imanghafoori\HeyMan\Facades\HeyMan;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -47,6 +48,7 @@ class ReplyTest extends TestCase
     /** @test */
     function it_knows_if_it_is_the_best_reply()
     {
+        HeyMan::turnOff()->eloquentChecks();
         $reply = create(\App\Reply::class);
 
         $this->assertFalse($reply->isBest());
@@ -68,7 +70,7 @@ class ReplyTest extends TestCase
     function a_reply_knows_the_total_xp_earned()
     {
         $this->signIn();
-
+        Heyman::turnOff()->allChecks();
         $reply = create('App\Reply'); // 2 points for creating the reply.
 
         $this->assertEquals(2, $reply->xp);

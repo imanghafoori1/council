@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Thread;
+use Imanghafoori\HeyMan\Facades\HeyMan;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -44,7 +45,7 @@ class PinThreadsTest extends TestCase
         $this->signInAdmin();
 
         $thread = create(\App\Thread::class);
-
+        $this->withExceptionHandling();
         $this->post(route('pinned-threads.store', $thread));
 
         $this->assertTrue($thread->fresh()->pinned, 'Failed asserting that the thread was pinned.');
@@ -56,7 +57,7 @@ class PinThreadsTest extends TestCase
         $this->signInAdmin();
 
         $thread = create(\App\Thread::class, ['pinned' => true]);
-
+        $this->withExceptionHandling();
         $this->delete(route('pinned-threads.destroy', $thread));
 
         $this->assertFalse($thread->fresh()->pinned, 'Failed asserting that the thread was unpinned.');
@@ -70,6 +71,7 @@ class PinThreadsTest extends TestCase
         $threads = create(Thread::class, [], 3);
         $ids = $threads->pluck('id');
 
+        HeyMan::turnOff()->eloquentChecks();
         $response_data = $this->getJson(route('threads'))->decodeResponseJson()['data'];
         $this->assertEquals($ids[0], $response_data[0]['id']);
         $this->assertEquals($ids[1], $response_data[1]['id']);

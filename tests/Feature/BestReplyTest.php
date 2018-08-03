@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Imanghafoori\HeyMan\Facades\HeyMan;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -50,6 +51,7 @@ class BestReplyTest extends TestCase
 
         $reply = create(\App\Reply::class, ['user_id' => auth()->id()]);
 
+        HeyMan::turnOff()->eloquentChecks();
         $reply->thread->markBestReply($reply);
 
         $this->deleteJson(route('replies.destroy', $reply));

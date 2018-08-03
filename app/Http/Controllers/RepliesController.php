@@ -35,7 +35,7 @@ class RepliesController extends Controller
      * @param  CreatePostRequest $form
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function store($channelId, Thread $thread, CreatePostRequest $form)
+    public function store($channelId, Thread $thread /*,CreatePostRequest $form*/)
     {
         if ($thread->locked) {
             return response('Thread is locked', 422);
@@ -54,9 +54,9 @@ class RepliesController extends Controller
      */
     public function update(Reply $reply)
     {
-        $this->authorize('update', $reply);
-
-        $reply->update(request()->validate(['body' => 'required|spamfree']));
+        //$this->authorize('update', $reply);
+        //$reply->update(request()->validate(['body' => 'required|spamfree']));
+        $reply->update(request()->only(['body']));
     }
 
     /**
@@ -67,8 +67,7 @@ class RepliesController extends Controller
      */
     public function destroy(Reply $reply)
     {
-        $this->authorize('update', $reply);
-
+        //$this->authorize('update', $reply);
         $reply->delete();
 
         if (request()->expectsJson()) {

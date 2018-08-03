@@ -48,12 +48,7 @@ class ChannelsController extends Controller
     public function update(Channel $channel)
     {
         $channel->update(
-            request()->validate([
-                'name' => ['required', Rule::unique('channels')->ignore($channel->id)],
-                'description' => 'required',
-                'color' => 'required',
-                'archived' => 'required|boolean'
-            ])
+            request()->only(['name', 'description', 'color', 'archived'])
         );
 
         cache()->forget('channels');
@@ -73,14 +68,15 @@ class ChannelsController extends Controller
      */
     public function store()
     {
-        $channel = Channel::create(
+      /*  $channel = Channel::create(
             request()->validate([
                 'name' => 'required|unique:channels',
                 'color' => 'required',
                 'description' => 'required',
             ])
-        );
+        );*/
 
+        $channel = Channel::create(request()->only(['name', 'color', 'description',]));
         cache()->forget('channels');
 
         if (request()->wantsJson()) {

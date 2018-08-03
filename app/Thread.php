@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Events\ThreadReceivingNewReply;
+use Imanghafoori\HeyMan\Facades\HeyMan;
 use Laravel\Scout\Searchable;
 use App\Filters\ThreadFilters;
 use App\Events\ThreadWasPublished;
@@ -51,10 +53,12 @@ class Thread extends Model
     {
         parent::boot();
 
-        static::deleting(function ($thread) {
+        static::deleted(function ($thread) {
+            HeyMan::turnOff()->eloquentChecks();
             $thread->replies->each->delete();
 
             $thread->creator->loseReputation('thread_published');
+            HeyMan::turnOn()->eloquentChecks();
         });
 
         static::created(function ($thread) {
@@ -144,6 +148,8 @@ class Thread extends Model
      */
     public function addReply($reply)
     {
+        event(new ThreadReceivingNewReply($this));
+
         $reply = $this->replies()->create($reply);
 
         event(new ThreadReceivedNewReply($reply));

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use Imanghafoori\HeyMan\Facades\HeyMan;
 use Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,15 +14,20 @@ class AdministratorTest extends TestCase
     /** @test */
     public function an_administrator_can_access_the_administration_section()
     {
+        HeyMan::turnOn()->allChecks();
         $this->withExceptionHandling()
             ->signInAdmin()
             ->get(route('admin.dashboard.index'))
+
             ->assertStatus(Response::HTTP_OK);
+
+        ;
     }
 
     /** @test */
     public function a_non_administrator_cannot_access_the_administration_section()
     {
+        HeyMan::turnOn()->allChecks();
         $this->withExceptionHandling()
             ->actingAs(create(\App\User::class))
             ->get(route('admin.dashboard.index'))

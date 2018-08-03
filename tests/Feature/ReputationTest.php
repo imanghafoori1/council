@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Reply;
 use App\Thread;
 use App\Reputation;
+use Imanghafoori\HeyMan\Facades\HeyMan;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -76,7 +77,7 @@ class ReputationTest extends TestCase
     public function a_user_gains_points_when_their_reply_is_marked_as_best()
     {
         $thread = create(Thread::class);
-
+        HeyMan::turnOff()->eloquentChecks();
         $thread->markBestReply($reply = $thread->addReply([
             'user_id' => create(\App\User::class)->id,
             'body' => 'Here is a reply.'
@@ -92,6 +93,8 @@ class ReputationTest extends TestCase
         $this->signIn();
 
         $reply = create(Reply::class, ['user_id' => auth()->id()]);
+
+        HeyMan::turnOff()->eloquentChecks();
 
         $reply->thread->markBestReply($reply);
 
@@ -112,6 +115,7 @@ class ReputationTest extends TestCase
         // And we have a user, Jane.
         $jane = create(\App\User::class);
 
+        HeyMan::turnOff()->eloquentChecks();
         // If the owner of the thread marks Jane's reply as best...
         $thread->markBestReply($thread->addReply([
             'user_id' => $jane->id,

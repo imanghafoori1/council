@@ -70,7 +70,7 @@ class ThreadsController extends Controller
                     $query->where('archived', false);
                 })
             ],
-            'g-recaptcha-response' => ['required', $recaptcha]
+            //'g-recaptcha-response' => ['required', $recaptcha]
         ]);
 
         $thread = Thread::create([
@@ -117,13 +117,15 @@ class ThreadsController extends Controller
      */
     public function update($channel, Thread $thread)
     {
-        $this->authorize('update', $thread);
+        //$this->authorize('update', $thread);
 
-        $thread->update(request()->validate([
+       /* $thread->update(request()->validate([
             'title' => 'required',
             'body' => 'required'
-        ]));
+        ]));*/
 
+
+        $thread->update(request()->only(['title', 'body']));
         return $thread;
     }
 
@@ -136,8 +138,7 @@ class ThreadsController extends Controller
      */
     public function destroy($channel, Thread $thread)
     {
-        $this->authorize('update', $thread);
-
+        // $this->authorize('update', $thread);
         $thread->delete();
 
         if (request()->wantsJson()) {

@@ -2,10 +2,11 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Notifications\ThreadWasUpdated;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
+use Imanghafoori\HeyMan\Facades\HeyMan;
+use Tests\TestCase;
 
 class ThreadTest extends TestCase
 {
@@ -51,10 +52,11 @@ class ThreadTest extends TestCase
     {
         $reply = $this->thread->addReply([
             'body' => 'Foobar',
-            'user_id' => 1
+            'user_id' => 1,
         ]);
-
-        $this->thread->markBestReply($reply);
+        HeyMan::turnOff()->eloquentChecks(function () use ($reply) {
+            $this->thread->markBestReply($reply);
+        });
 
         $this->assertEquals($reply->id, $this->thread->bestReply->id);
     }

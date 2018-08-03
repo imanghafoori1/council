@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\User;
 use App\Channel;
+use Imanghafoori\HeyMan\Facades\HeyMan;
 use Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,7 +32,7 @@ class ChannelAdministrationTest extends TestCase
     public function non_administrators_cannot_access_the_channel_administration_section()
     {
         $regularUser = create(User::class);
-
+        HeyMan::turnOn()->allChecks();
         $this->actingAs($regularUser)
             ->get(route('admin.channels.index'))
             ->assertStatus(Response::HTTP_FORBIDDEN);
@@ -83,7 +84,7 @@ class ChannelAdministrationTest extends TestCase
         $channel = create(\App\Channel::class);
 
         $this->assertFalse($channel->archived);
-
+$this->withoutExceptionHandling();
         $this->patch(
             route('admin.channels.update', ['channel' => $channel->slug]),
             [
@@ -168,8 +169,7 @@ class ChannelAdministrationTest extends TestCase
     {
         $this->signInAdmin();
 
-        $channel = make(Channel::class, $overrides);
-
-        return $this->post(route('admin.channels.store'), $channel->toArray());
+        $channel = make(Channel::class);
+        return $this->post(route('admin.channels.store'), array_merge($channel->toArray(), $overrides));
     }
 }

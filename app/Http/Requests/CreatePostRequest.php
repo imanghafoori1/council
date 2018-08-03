@@ -15,7 +15,7 @@ class CreatePostRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('create', new \App\Reply);
+        //return Gate::allows('create', new \App\Reply);
     }
 
     /**
@@ -27,9 +27,9 @@ class CreatePostRequest extends FormRequest
      */
     protected function failedAuthorization()
     {
-        throw new ThrottleException(
+        /*throw new ThrottleException(
             'You are replying too frequently. Please take a break.'
-        );
+        );*/
     }
 
     /**
@@ -40,7 +40,7 @@ class CreatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            'body' => 'required|spamfree'
+            //'body' => 'required|spamfree'
         ];
     }
 }
