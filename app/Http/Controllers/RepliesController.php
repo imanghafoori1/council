@@ -13,7 +13,11 @@ class RepliesController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => 'index']);
+
+        // To see what we have instead of this go to :
+        // AuthServiceProvider @ authenticateRoutes
+
+        //$this->middleware('auth', ['except' => 'index']);
     }
 
     /**

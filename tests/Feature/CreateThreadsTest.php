@@ -28,9 +28,8 @@ class CreateThreadsTest extends TestCase
     public function guests_may_not_create_threads()
     {
         $this->withExceptionHandling();
-        $thread = make(\App\Thread::class);
 
-        $this->post('threads', $thread->toArray())->assertStatus(302)->assertRedirect(route('login'));
+        $this->post('threads')->assertStatus(302)->assertRedirect(route('login'));
     }
 
     /** @test */

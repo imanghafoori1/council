@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Exceptions\ThrottleException;
 use App\Reply;
 use App\Thread;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -36,24 +35,27 @@ class AuthServiceProvider extends ServiceProvider
         $this->validateRequests();
         $this->authorizeAdminRoutes();
         $this->authorizeEloquentModels();
-//        Gate::before(function ($user) {
-//            if ($user->name === 'John Doe') return true;
-//        });
     }
 
     private function authenticateRoutes()
     {
         HeyMan::whenYouReachRoute([
             'avatar',
-            'replies.favorite',
+
             'user-notifications',
             'user-notifications.destroy',
+
+            'replies.favorite',
             'replies.unfavorite',
+
             'threads.update',
             'threads.destroy',
-        ])->youShouldBeLoggedIn()->otherwise()->weThrowNew(AuthenticationException::class);
+            'threads.store',
 
-        HeyMan::whenYouReachRoute(['threads.store', 'replies.store'])->youShouldBeLoggedIn()->otherwise()->redirect()->route('login');
+            'replies.store',
+            'replies.update',
+            'replies.destroy'
+        ])->youShouldBeLoggedIn()->otherwise()->weRespondFrom('\App\Http\Responses\Authentication@handle');
     }
 
     private function validateRequests()
