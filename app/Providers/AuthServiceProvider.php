@@ -8,6 +8,7 @@ use App\Thread;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Imanghafoori\HeyMan\Chain;
 use Imanghafoori\HeyMan\Facades\HeyMan;
 
 class AuthServiceProvider extends ServiceProvider
@@ -39,7 +40,7 @@ class AuthServiceProvider extends ServiceProvider
 
     private function authenticateRoutes()
     {
-        HeyMan::whenYouReachRoute([
+        HeyMan::whenYouHitRouteName([
             'avatar',
 
             'user-notifications',
@@ -60,19 +61,20 @@ class AuthServiceProvider extends ServiceProvider
 
     private function validateRequests()
     {
-        HeyMan::whenYouReachRoute('replies.store')->yourRequestShouldBeValid(['body' => 'required|spamfree']);
-        HeyMan::whenYouReachRoute('threads.update')->yourRequestShouldBeValid([
+        HeyMan::whenYouHitRouteName('replies.store')->yourRequestShouldBeValid(['body' => 'required|spamfree']);
+
+        HeyMan::whenYouHitRouteName('threads.update')->yourRequestShouldBeValid([
             'title' => 'required',
             'body' => 'required',
         ]);
 
-        HeyMan::whenYouReachRoute('admin.channels.store')->yourRequestShouldBeValid([
+        HeyMan::whenYouHitRouteName('admin.channels.store')->yourRequestShouldBeValid([
             'name' => 'required|unique:channels',
             'color' => 'required',
             'description' => 'required',
         ]);
 
-        HeyMan::whenYouReachRoute('admin.channels.update')->yourRequestShouldBeValid(function () {
+        HeyMan::whenYouHitRouteName('admin.channels.update')->yourRequestShouldBeValid(function () {
             return [
                 'name' => ['required', Rule::unique('channels')->ignore(request()->route('channel'), 'slug')],
                 'description' => 'required',
@@ -82,7 +84,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         HeyMan::whenYouCallAction('RepliesController@update')->yourRequestShouldBeValid(['name' => 'required|spamfree',]);
-        HeyMan::whenYouReachRoute('avatar')->yourRequestShouldBeValid(['avatar' => ['required', 'image']]);
+        HeyMan::whenYouHitRouteName('avatar')->yourRequestShouldBeValid(['avatar' => ['required', 'image']]);
 
         HeyMan::whenYouSendPost('threads')->yourRequestShouldBeValid(function () {
             return [
@@ -105,14 +107,14 @@ class AuthServiceProvider extends ServiceProvider
             return $user->isAdmin();
         });
 
-        HeyMan::whenYouReachRoute([
+        HeyMan::whenYouHitRouteName([
             'locked-threads.store',
             'locked-threads.destroy',
             'pinned-threads.store',
             'pinned-threads.destroy',
         ])->thisGateShouldAllow('isAdmin')->otherwise()->abort(403, 'You do not have permission to perform this action.');
 
-        HeyMan::whenYouReachRoute('admin.*')->thisGateShouldAllow('isAdmin')->otherwise()->weDenyAccess();
+        HeyMan::whenYouHitRouteName('admin.*')->thisGateShouldAllow('isAdmin')->otherwise()->weDenyAccess();
     }
 
     private function authorizeEloquentModels()
@@ -130,7 +132,7 @@ class AuthServiceProvider extends ServiceProvider
 
         HeyMan::whenYouCreate(Thread::class)->thisClosureShouldAllow($hasConfirmedEmail)->otherwise()->redirect()->to('/threads')->with('flash', 'You must first confirm your email address.');
 
-        HeyMan::whenYouReachRoute('replies.store')->thisGateShouldAllow('createReply')->otherwise()->weThrowNew(ThrottleException::class, 'You are replying too frequently. Please take a break.');
+        HeyMan::whenYouHitRouteName('replies.store')->thisGateShouldAllow('createReply')->otherwise()->weThrowNew(ThrottleException::class, 'You are replying too frequently. Please take a break.');
 
         Gate::define('ownModel', function ($user, $model) {
             return $user->id == $model->user_id or $user->isAdmin();
