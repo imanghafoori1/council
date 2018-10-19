@@ -14,7 +14,6 @@ class UsersSeeder extends Seeder
     public function run()
     {
         User::truncate();
-        Heyman::turnOff()->eloquentChecks();
         collect([
             [
                 'name' => 'John Doe',
@@ -50,6 +49,5 @@ class UsersSeeder extends Seeder
                 ]
             );
         });
-        Heyman::turnOn()->eloquentChecks();
     }
 }

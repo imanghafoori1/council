@@ -20,9 +20,16 @@ class SampleDataSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
+
+        /**
+         * Remember:
+         * It is not needed to turnOff eloquent checks when you are using
+         * "php artisan db:seed" since it is automatically gets turned off for you
+        */
         Heyman::turnOff()->eloquentChecks();
         $this->channels()->content();
         Heyman::turnOn()->eloquentChecks();
+
         Schema::enableForeignKeyConstraints();
     }
 
@@ -95,13 +102,11 @@ class SampleDataSeeder extends Seeder
      */
     public function recordActivity($model, $event_type, $user_id)
     {
-        Heyman::turnOff()->eloquentChecks();
         $type = strtolower((new \ReflectionClass($model))->getShortName());
 
         $model->morphMany(\App\Activity::class, 'subject')->create([
             'user_id' => $user_id,
             'type' => "{$event_type}_{$type}"
         ]);
-        Heyman::turnOn()->eloquentChecks();
     }
 }
