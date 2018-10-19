@@ -2,6 +2,7 @@
 
 use App\User;
 use Illuminate\Database\Seeder;
+use Imanghafoori\HeyMan\Facades\HeyMan;
 
 class UsersSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class UsersSeeder extends Seeder
     public function run()
     {
         User::truncate();
-
+        Heyman::turnOff()->eloquentChecks();
         collect([
             [
                 'name' => 'John Doe',
@@ -49,5 +50,6 @@ class UsersSeeder extends Seeder
                 ]
             );
         });
+        Heyman::turnOn()->eloquentChecks();
     }
 }

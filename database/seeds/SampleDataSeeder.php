@@ -8,6 +8,7 @@ use App\Favorite;
 use App\ThreadSubscription;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
+use Imanghafoori\HeyMan\Facades\HeyMan;
 
 class SampleDataSeeder extends Seeder
 {
@@ -19,9 +20,9 @@ class SampleDataSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-
+        Heyman::turnOff()->eloquentChecks();
         $this->channels()->content();
-
+        Heyman::turnOn()->eloquentChecks();
         Schema::enableForeignKeyConstraints();
     }
 
@@ -94,11 +95,13 @@ class SampleDataSeeder extends Seeder
      */
     public function recordActivity($model, $event_type, $user_id)
     {
+        Heyman::turnOff()->eloquentChecks();
         $type = strtolower((new \ReflectionClass($model))->getShortName());
 
         $model->morphMany(\App\Activity::class, 'subject')->create([
             'user_id' => $user_id,
             'type' => "{$event_type}_{$type}"
         ]);
+        Heyman::turnOn()->eloquentChecks();
     }
 }

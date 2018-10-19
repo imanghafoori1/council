@@ -8,7 +8,6 @@ use App\Thread;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
-use Imanghafoori\HeyMan\Chain;
 use Imanghafoori\HeyMan\Facades\HeyMan;
 
 class AuthServiceProvider extends ServiceProvider
