@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "edfc8ae6bd93f115d2f2781641961998",
+    "content-hash": "e2fee961ae1d831743ae448aebe450ad",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -642,6 +642,120 @@
                 "url"
             ],
             "time": "2017-03-20T17:10:46+00:00"
+        },
+        {
+            "name": "imanghafoori/laravel-heyman",
+            "version": "2.2.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/imanghafoori1/laravel-heyman.git",
+                "reference": "4d6f1694a3413e7698102d16a1bb754efc309f5d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imanghafoori1/laravel-heyman/zipball/4d6f1694a3413e7698102d16a1bb754efc309f5d",
+                "reference": "4d6f1694a3413e7698102d16a1bb754efc309f5d",
+                "shasum": ""
+            },
+            "require": {
+                "imanghafoori/laravel-terminator": "*",
+                "laravel/framework": "~5.1",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "barryvdh/laravel-debugbar": "^2.3",
+                "mockery/mockery": "^0.9.9",
+                "orchestra/database": "@dev",
+                "orchestra/testbench": "~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Imanghafoori\\HeyMan\\HeyManServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Imanghafoori\\HeyMan\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Iman Ghafoori",
+                    "email": "imanghafoori1@gmail.com"
+                }
+            ],
+            "description": "A package to help you write expressive defensive code in a functional manner",
+            "homepage": "https://github.com/imanghafoori1/laravel-HeyMan",
+            "keywords": [
+                "eloquent-validation",
+                "laravel",
+                "laravel-acl",
+                "laravel-authorization",
+                "laravel-permission",
+                "laravel-roles",
+                "laravel-validation",
+                "laravel5",
+                "laravel5-package",
+                "php"
+            ],
+            "time": "2018-10-17T20:40:29+00:00"
+        },
+        {
+            "name": "imanghafoori/laravel-terminator",
+            "version": "v1.03",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/imanghafoori1/laravel-terminator.git",
+                "reference": "e52cf8ad8852936fe9202babca404adf602a2dc9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imanghafoori1/laravel-terminator/zipball/e52cf8ad8852936fe9202babca404adf602a2dc9",
+                "reference": "e52cf8ad8852936fe9202babca404adf602a2dc9",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "5.*",
+                "php": ">=7.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ImanGhafoori\\Terminator\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Iman Ghafoori",
+                    "email": "imanghafoori1@gmail.com"
+                }
+            ],
+            "description": "A minimal yet powerful package to give you opportunity to refactor your controllers.",
+            "homepage": "https://github.com/imanghafoori1/laravel-terminator",
+            "keywords": [
+                "laravel",
+                "laravel5",
+                "laravel5-package",
+                "php"
+            ],
+            "time": "2018-07-12T14:16:45+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
