@@ -3,6 +3,11 @@
 This is a forked version of an open source forum that was built and maintained at Laracasts.com.
 
 We have used laravel-heyman package to re-write some it's code as an example usage.
+
+
+Visit: https://github.com/imanghafoori1/laravel-heyman
+
+
 ## Installation
 
 ### Prerequisites
@@ -16,7 +21,7 @@ We have used laravel-heyman package to re-write some it's code as an example usa
 
 ### Step 1
 
-Begin by cloning this repository to your machine, and installing all Composer & NPM dependencies.
+Begin by cloning this repository to your machine, and installing all Composer dependencies.
 
 ```bash
 git clone git@github.com:imanghafoori1/council.git
